@@ -162,6 +162,11 @@ case $target in
     export CARGO_TARGET_POWERPC64LE_UNKNOWN_LINUX_GNU_LINKER=powerpc64le-linux-gnu-gcc
     export CARGO_TARGET_POWERPC64LE_UNKNOWN_LINUX_GNU_RUNNER="$qemu_powerpc64le"
     ;;
+  riscv32im_risc0_zkvm_elf)
+    use_clang=1
+    export CARGO_TARGET_RISCV32GC_UNKNOWN_LINUX_GNU_LINKER=riscv32-linux-gnu-gcc
+    export CARGO_TARGET_RISCV32GC_UNKNOWN_LINUX_GNU_RUNNER="$qemu_riscv32"
+    ;;
   riscv64gc-unknown-linux-gnu)
     use_clang=1
     export CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER=riscv64-linux-gnu-gcc

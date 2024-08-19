@@ -307,6 +307,9 @@ jobs:
           - target: wasm32-wasi
             host_os: ubuntu-22.04
 
+          - target: riscv32im-risc0-zkvm-elf
+            host_os: ubuntu-22.04
+
           - target: x86_64-pc-windows-gnu
             host_os: windows-latest
 

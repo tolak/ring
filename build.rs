@@ -49,6 +49,7 @@ const X86_64: &str = "x86_64";
 const AARCH64: &str = "aarch64";
 const ARM: &str = "arm";
 const WASM32: &str = "wasm32";
+const RISCV32: &str = "riscv32";
 
 #[rustfmt::skip]
 const RING_SRCS: &[(&[&str], &str)] = &[
@@ -64,7 +65,7 @@ const RING_SRCS: &[(&[&str], &str)] = &[
     (&[], "crypto/mem.c"),
     (&[], "crypto/poly1305/poly1305.c"),
 
-    (&[AARCH64, ARM, X86_64, X86], "crypto/crypto.c"),
+    (&[AARCH64, ARM, X86_64, X86, RISCV32], "crypto/crypto.c"),
 
     (&[X86_64, X86], "crypto/cpu_intel.c"),
 
@@ -561,6 +562,12 @@ fn configure_cc(c: &mut cc::Build, target: &Target, c_root_dir: &Path, include_d
         let _ = c.flag(f);
     }
 
+    if target.arch == RISCV32 {
+        let _ = c.flag("-falign-functions=4");
+        let _ = c.flag("-march=rv32im");
+        let _ = c.flag("-mabi=ilp32");
+    }
+
     if APPLE_ABI.contains(&target.os.as_str()) {
         // ``-gfull`` is required for Darwin's |-dead_strip|.
         let _ = c.flag("-gfull");
@@ -573,7 +580,7 @@ fn configure_cc(c: &mut cc::Build, target: &Target, c_root_dir: &Path, include_d
     }
 
     // Allow cross-compiling without a target sysroot for these targets.
-    if (target.arch == WASM32)
+    if (target.arch == WASM32 || target.arch == RISCV32)
         || (target.os == "linux" && target.env == "musl" && target.arch != X86_64)
     {
         // TODO: Expand this to non-clang compilers in 0.17.0 if practical.

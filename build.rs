@@ -566,6 +566,8 @@ fn configure_cc(c: &mut cc::Build, target: &Target, c_root_dir: &Path, include_d
         let _ = c.flag("-falign-functions=4");
         let _ = c.flag("-march=rv32im");
         let _ = c.flag("-mabi=ilp32");
+        let _ = c.define("RING_CORE_NOSTDLIBINC", "1");
+        let _ = c.define("__riscv", None);
     }
 
     if APPLE_ABI.contains(&target.os.as_str()) {
